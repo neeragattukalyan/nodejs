@@ -1,16 +1,18 @@
 let express = require("express");
-let addition = require("./addition");
+
 let mongoose = require("mongoose");
-
-console.log(addition.add(4,5));
+const url = "mongodb://localhost/kalyanfirstdb"
 const app = express();
-app.get('/',function(req,res){
-    res.send("this initial route");
+mongoose.connect(url,{useNewUrlParser:true});
+const con = mongoose.connection;
+con.on('open',function(){
+    console.log("connecting Db....")
 })
-app.get('/kalyan',function(req,res){
-    res.send("this initial route 2");
-})
-
+const addition = require("./addition");
+const suryapage = require("./suryaroute");
+app.use(express.json());
+app.use('/kalyan' , addition);
+app.use("/kalyan/surya" , suryapage);
 app.listen(8081, () => {
     console.log('Running on server')
 })
